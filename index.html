@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>YessAtHome — Yesenia Lee | DIY · Home · Jacksonville</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-light: #F0D060;
+    --charcoal: #111;
+    --charcoal-mid: #1E1E1E;
+    --off-white: #F5F0E8;
+    --sage: #8B9E7E;
+    --orange: #E8621A;
+    --orange-dk: #C04E10;
+    --dim: #9A9189;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--charcoal); color: var(--off-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ═══════════════════════════════════════
+     LOADER
+  ═══════════════════════════════════════ */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #080808;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0;
+    transition: opacity .7s ease, visibility .7s ease;
+  }
+  #loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  /* ── Realistic drill SVG ── */
+  .drill-wrap {
+    position: relative;
+    width: 220px; height: 160px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Drill body group – the whole thing bobs slightly */
+  .drill-body-group {
+    animation: drillBob 1.8s ease-in-out infinite;
+    transform-origin: center center;
+  }
+  @keyframes drillBob {
+    0%,100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(-6px) rotate(2deg); }
+  }
+
+  /* The drill bit spins */
+  .drill-bit-spin {
+    animation: bitSpin .18s linear infinite;
+    transform-origin: 0px 3px;
+  }
+  @keyframes bitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* Vibration on the bit tip */
+  .drill-bit-tip {
+    animation: tipVibe .09s linear infinite alternate;
+    transform-origin: left center;
+  }
+  @keyframes tipVibe {
+    0%   { transform: translateY(-1.5px); }
+    100% { transform: translateY(1.5px); }
+  }
+
+  /* Sparks */
+  .spark {
+    position: absolute;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold);
+    animation: sparkFly 0.6s ease-out infinite;
+    opacity: 0;
+  }
+  .spark:nth-child(1) { animation-delay: 0s;    animation-name: sparkFly1; }
+  .spark:nth-child(2) { animation-delay: .15s;  animation-name: sparkFly2; }
+  .spark:nth-child(3) { animation-delay: .3s;   animation-name: sparkFly3; }
+  .spark:nth-child(4) { animation-delay: .45s;  animation-name: sparkFly4; }
+  @keyframes sparkFly1 {
+    0%   { opacity:1; transform: translate(158px, 78px) scale(1); }
+    100% { opacity:0; transform: translate(170px, 60px) scale(0); }
+  }
+  @keyframes sparkFly2 {
+    0%   { opacity:1; transform: translate(158px, 78px) scale(1); }
+    100% { opacity:0; transform: translate(175px, 80px) scale(0); }
+  }
+  @keyframes sparkFly3 {
+    0%   { opacity:1; transform: translate(158px, 78px) scale(1); }
+    100% { opacity:0; transform: translate(168px, 93px) scale(0); }
+  }
+  @keyframes sparkFly4 {
+    0%   { opacity:1; transform: translate(158px, 78px) scale(.8); }
+    100% { opacity:0; transform: translate(180px, 70px) scale(0); }
+  }
+
+  .loader-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: .4em;
+    color: var(--gold); margin-top: 24px;
+  }
+  .loader-sub {
+    font-size: .72rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--dim);
+    margin-top: 6px;
+  }
+  .loader-bar-shell {
+    width: 200px; height: 2px;
+    background: #2a2a2a; margin-top: 18px;
+    border-radius: 2px; overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--gold));
+    border-radius: 2px;
+    animation: fillUp 2s ease forwards;
+  }
+  @keyframes fillUp { from { width: 0; } to { width: 100%; } }
+
+  /* ═══════════════════════════════════════
+     NAV
+  ═══════════════════════════════════════ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 16px 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(8,8,8,.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(212,175,55,.12);
+    transition: padding .3s;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem; font-weight: 900;
+    color: var(--gold); letter-spacing: .05em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo-icon { width: 26px; height: 26px; }
+  .nav-links { display: flex; gap: 34px; list-style: none; }
+  .nav-links a {
+    font-size: .75rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim);
+    transition: color .2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute;
+    bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--gold); transition: width .25s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--orange); color: #fff;
+    padding: 9px 22px; border-radius: 2px;
+    font-size: .72rem; letter-spacing: .14em;
+    text-transform: uppercase; font-weight: 600;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover { background: var(--orange-dk); color:#fff; transform: translateY(-1px); }
+  .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .burger span { display: block; width: 23px; height: 2px; background: var(--gold); border-radius: 2px; transition: .3s; }
+
+  /* ═══════════════════════════════════════
+     HERO  — real photo background
+  ═══════════════════════════════════════ */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex; align-items: center;
+    padding: 130px 56px 90px;
+    overflow: hidden;
+  }
+
+  /* Real background photo – her Linktree og image / profile photo */
+  .hero-photo-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://ugc.production.linktr.ee/74b79254-b434-45f0-a5e8-5164b1403550_Image.jpeg');
+    background-size: cover;
+    background-position: center top;
+    filter: blur(3px) brightness(.38) saturate(1.1);
+    transform: scale(1.05);
+  }
+  /* A colour-grade overlay to pull it into the brand palette */
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      110deg,
+      rgba(10,8,5,.85) 0%,
+      rgba(20,12,4,.55) 45%,
+      rgba(10,8,5,.65) 100%
+    );
+  }
+  /* Warm-gold vignette on right for depth */
+  .hero-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(212,175,55,.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 20% 80%, rgba(232,98,26,.07) 0%, transparent 45%);
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 700px; }
+  .eyebrow {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: .82rem; letter-spacing: .35em;
+    color: var(--orange); margin-bottom: 22px;
+  }
+  .eyebrow::before { content:''; display:block; width:28px; height:1px; background:var(--orange); }
+
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.2rem, 6.5vw, 5.8rem);
+    font-weight: 900; line-height: 1.03;
+    letter-spacing: -.01em;
+    color: var(--off-white); margin-bottom: 10px;
+  }
+  .hero-h1 em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+    letter-spacing: .2em; color: var(--gold-light);
+    margin-bottom: 26px;
+  }
+  .hero-bio {
+    font-size: 1.05rem; line-height: 1.85;
+    color: rgba(245,240,232,.72); max-width: 530px;
+    margin-bottom: 42px;
+  }
+  .hero-bio strong { color: var(--off-white); }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-pri {
+    background: linear-gradient(135deg, var(--orange), var(--orange-dk));
+    color:#fff; padding:15px 32px; border-radius:2px;
+    font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+    box-shadow:0 4px 22px rgba(232,98,26,.38);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-pri:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(232,98,26,.55); color:#fff; }
+  .btn-out {
+    border: 1px solid var(--gold); color: var(--gold);
+    padding:15px 32px; border-radius:2px;
+    font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+    transition: background .2s, color .2s;
+  }
+  .btn-out:hover { background:var(--gold); color:var(--charcoal); }
+
+  .hero-profile-photo {
+    position: absolute; right: 80px; bottom: 0; z-index: 2;
+    width: clamp(200px, 22vw, 340px);
+    filter: drop-shadow(0 0 40px rgba(212,175,55,.18));
+    border-bottom: none;
+  }
+  .hero-profile-photo img {
+    width: 100%; border-radius: 4px 4px 0 0;
+    display: block;
+    object-fit: cover;
+    border: 1px solid rgba(212,175,55,.2);
+    border-bottom: none;
+  }
+  .hero-photo-frame {
+    position: absolute; inset: 0;
+    border: 1px solid rgba(212,175,55,.15);
+    border-radius: 4px 4px 0 0;
+    pointer-events: none;
+  }
+  .hero-photo-corner {
+    position: absolute; top: -10px; left: -10px;
+    width: 32px; height: 32px;
+    border-top: 2px solid var(--gold); border-left: 2px solid var(--gold);
+  }
+
+  .hero-stats {
+    position: absolute; left: 56px; bottom: 40px; z-index: 2;
+    display: flex; gap: 44px;
+  }
+  .stat { text-align: left; }
+  .stat-n {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 700;
+    color: var(--gold); line-height: 1;
+  }
+  .stat-l {
+    font-size: .68rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--dim); margin-top: 5px;
+  }
+
+  /* Tape measure bottom */
+  .tape-wrap {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 5px; overflow: hidden;
+  }
+  .tape-inner {
+    height: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px, var(--gold) 8px,
+      #1a1a1a 8px, #1a1a1a 16px,
+      var(--orange) 16px, var(--orange) 18px,
+      #1a1a1a 18px, #1a1a1a 32px
+    );
+    animation: tapeSlide 3s ease-out forwards;
+    transform: translateX(-100%);
+  }
+  @keyframes tapeSlide { to { transform: translateX(0); } }
+
+  /* ═══════════════════════════════════════
+     SCROLLING MARQUEE
+  ═══════════════════════════════════════ */
+  .marquee-strip {
+    background: var(--charcoal-mid);
+    border-top: 1px solid rgba(212,175,55,.1);
+    border-bottom: 1px solid rgba(212,175,55,.1);
+    padding: 14px 0; overflow: hidden;
+  }
+  .marquee-inner {
+    display: flex; gap: 48px; white-space: nowrap;
+    animation: marqueeScroll 22s linear infinite;
+  }
+  @keyframes marqueeScroll { from {transform:translateX(0)} to {transform:translateX(-50%)} }
+  .marquee-item {
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: .9rem; letter-spacing: .3em;
+    color: var(--dim);
+  }
+  .marquee-item svg { width: 16px; height: 16px; color: var(--gold); flex-shrink: 0; }
+
+  /* ═══════════════════════════════════════
+     SHARED SECTION STYLES
+  ═══════════════════════════════════════ */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 96px 48px; }
+  .sec-eye {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: .8rem; letter-spacing: .35em; color: var(--orange);
+    margin-bottom: 14px;
+  }
+  .sec-eye::before { content:''; display:block; width:26px; height:1px; background:var(--orange); }
+  .sec-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.15; margin-bottom: 20px;
+  }
+  .sec-h2 em { font-style:italic; color:var(--gold); }
+  .gold-line { width:54px; height:2px; background:linear-gradient(90deg,var(--gold),transparent); margin-bottom:44px; }
+
+  /* ═══════════════════════════════════════
+     ABOUT
+  ═══════════════════════════════════════ */
+  #about { background: var(--charcoal-mid); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
+  .about-photo-wrap { position:relative; }
+  .about-photo-corner {
+    position:absolute; top:-12px; left:-12px;
+    width:44px; height:44px;
+    border-top:2px solid var(--gold); border-left:2px solid var(--gold);
+  }
+  .about-photo-corner-br {
+    position:absolute; bottom:-12px; right:-12px;
+    width:44px; height:44px;
+    border-bottom:2px solid var(--orange); border-right:2px solid var(--orange);
+  }
+  .about-photo-frame {
+    width:100%; aspect-ratio:3/4;
+    border-radius:4px; overflow:hidden;
+    border:1px solid rgba(212,175,55,.2);
+    background:#111;
+  }
+  .about-photo-frame img {
+    width:100%; height:100%; object-fit:cover; object-position:top center;
+    filter:saturate(1.1);
+    display:block;
+  }
+  .about-badge {
+    position:absolute; bottom:-22px; right:-22px;
+    width:110px; height:110px;
+    background: var(--orange);
+    border-radius:50%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    box-shadow:0 8px 28px rgba(232,98,26,.45);
+    animation:badgePulse 3s ease-in-out infinite;
+  }
+  @keyframes badgePulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06) rotate(4deg)} }
+  .about-badge-n { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:900; color:#fff; line-height:1; }
+  .about-badge-t { font-size:.5rem; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.85); margin-top:3px; text-align:center; }
+  .about-text p { font-size:1rem; line-height:1.9; color:var(--dim); margin-bottom:18px; }
+  .about-text p strong { color:var(--off-white); font-weight:600; }
+  .skill-grid { display:flex; flex-wrap:wrap; gap:8px; margin:28px 0; }
+  .skill-chip {
+    padding:7px 16px; border:1px solid rgba(212,175,55,.25);
+    border-radius:2px; font-size:.72rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--gold);
+    transition: background .2s, color .2s;
+    cursor:default;
+  }
+  .skill-chip:hover { background:var(--gold); color:var(--charcoal); }
+  .social-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
+  .soc-btn {
+    display:flex; align-items:center; gap:7px;
+    padding:9px 16px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.09); border-radius:2px;
+    font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+    transition:all .2s;
+  }
+  .soc-btn:hover { background:var(--orange); border-color:var(--orange); color:#fff; }
+  .soc-btn svg { width:15px; height:15px; }
+
+  /* ═══════════════════════════════════════
+     VIDEOS
+  ═══════════════════════════════════════ */
+  #videos { background:var(--charcoal); }
+  .video-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .vid-card {
+    background:var(--charcoal-mid);
+    border:1px solid rgba(212,175,55,.1);
+    border-radius:4px; overflow:hidden;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    display:block;
+  }
+  .vid-card:hover {
+    transform:translateY(-7px);
+    border-color:rgba(212,175,55,.35);
+    box-shadow:0 18px 48px rgba(0,0,0,.5);
+  }
+  .vid-thumb { position:relative; aspect-ratio:16/9; overflow:hidden; background:#0a0a0a; }
+  .vid-thumb img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s; }
+  .vid-card:hover .vid-thumb img { transform:scale(1.06); }
+  .vid-play {
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.3); transition:background .3s;
+  }
+  .vid-card:hover .vid-play { background:rgba(232,98,26,.45); }
+  .play-ring {
+    width:50px; height:50px; border-radius:50%;
+    background:rgba(255,255,255,.12);
+    border:2px solid rgba(255,255,255,.55);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .2s, background .2s, border-color .2s;
+  }
+  .vid-card:hover .play-ring { transform:scale(1.1); background:var(--orange); border-color:var(--orange); }
+  .play-ring svg { width:18px; height:18px; fill:#fff; margin-left:3px; }
+  .vid-info { padding:16px 18px 20px; }
+  .vid-cat {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:.8rem; letter-spacing:.3em; color:var(--orange); margin-bottom:5px;
+  }
+  .vid-title {
+    font-family:'Playfair Display',serif;
+    font-size:1rem; font-weight:700; line-height:1.45;
+    color:var(--off-white); margin-bottom:8px;
+  }
+  .vid-meta { font-size:.7rem; color:var(--dim); display:flex; gap:12px; }
+
+  /* ═══════════════════════════════════════
+     FEATURED PROJECT
+  ═══════════════════════════════════════ */
+  #projects { background:var(--charcoal-mid); }
+  .feat-card {
+    display:grid; grid-template-columns:1fr 1fr;
+    border:1px solid rgba(212,175,55,.12); border-radius:4px; overflow:hidden;
+    margin-bottom:28px;
+  }
+  .feat-img {
+    position:relative; min-height:380px;
+    overflow:hidden;
+  }
+  .feat-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .feat-img-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.05) 100%);
+  }
+  .feat-badge {
+    position:absolute; top:20px; left:20px;
+    background:var(--orange); color:#fff;
+    padding:5px 14px;
+    font-family:'Bebas Neue',sans-serif; font-size:.85rem; letter-spacing:.2em;
+    border-radius:2px;
+  }
+  .feat-body {
+    padding:52px 48px;
+    background:var(--charcoal);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .feat-body h3 {
+    font-family:'Playfair Display',serif;
+    font-size:1.85rem; font-weight:700; line-height:1.25;
+    margin-bottom:18px;
+  }
+  .feat-body p { font-size:.95rem; line-height:1.85; color:var(--dim); margin-bottom:28px; }
+  .proj-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
+  .proj-tag {
+    padding:5px 14px;
+    border:1px solid rgba(139,158,126,.35); color:var(--sage);
+    font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; border-radius:20px;
+  }
+  .mini-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+
+  /* ═══════════════════════════════════════
+     SHOP
+  ═══════════════════════════════════════ */
+  #shop { background:var(--charcoal); }
+  .shop-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .shop-card {
+    display:flex; align-items:center; gap:18px;
+    padding:24px 28px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(212,175,55,.12); border-radius:4px;
+    position:relative; overflow:hidden;
+    transition:all .3s;
+  }
+  .shop-card::before {
+    content:''; position:absolute; top:0; left:0;
+    width:3px; height:0;
+    background:var(--gold); transition:height .3s;
+  }
+  .shop-card:hover::before { height:100%; }
+  .shop-card:hover { background:rgba(212,175,55,.05); border-color:rgba(212,175,55,.35); transform:translateX(4px); }
+  .shop-ic {
+    width:48px; height:48px; flex-shrink:0;
+    background:rgba(232,98,26,.12);
+    border:1px solid rgba(232,98,26,.25); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .shop-ic svg { width:22px; height:22px; }
+  .shop-t { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--off-white); margin-bottom:4px; }
+  .shop-d { font-size:.78rem; color:var(--dim); line-height:1.5; }
+  .shop-arrow { margin-left:auto; color:var(--gold); font-size:1.1rem; opacity:0; transition:opacity .2s, transform .2s; }
+  .shop-card:hover .shop-arrow { opacity:1; transform:translateX(4px); }
+
+  /* ═══════════════════════════════════════
+     COMMUNITY
+  ═══════════════════════════════════════ */
+  #community { background:var(--charcoal-mid); }
+  .quote-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .q-card {
+    padding:28px; background:rgba(255,255,255,.03);
+    border:1px solid rgba(212,175,55,.1); border-radius:4px;
+    position:relative; transition:border-color .3s, transform .3s;
+  }
+  .q-card:hover { border-color:rgba(212,175,55,.3); transform:translateY(-4px); }
+  .q-mark { position:absolute; top:18px; right:20px; font-family:'Playfair Display',serif; font-size:3rem; line-height:.8; color:var(--orange); opacity:.35; }
+  .q-stars { color:var(--gold); font-size:.8rem; margin-bottom:10px; }
+  .q-text { font-size:.88rem; line-height:1.8; color:var(--dim); font-style:italic; margin-bottom:16px; }
+  .q-author { font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); font-weight:600; }
+
+  /* ═══════════════════════════════════════
+     CONTACT
+  ═══════════════════════════════════════ */
+  #contact { background:var(--charcoal); }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+  .c-info p { font-size:.95rem; line-height:1.85; color:var(--dim); margin-bottom:36px; }
+  .c-detail {
+    display:flex; align-items:center; gap:14px;
+    padding:14px 18px; margin-bottom:14px;
+    border:1px solid rgba(212,175,55,.1); border-radius:3px;
+    transition:border-color .25s;
+  }
+  .c-detail:hover { border-color:rgba(212,175,55,.35); }
+  .c-icon {
+    width:38px; height:38px; flex-shrink:0;
+    background:rgba(212,175,55,.08); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold);
+  }
+  .c-icon svg { width:17px; height:17px; }
+  .c-lbl { font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; color:var(--dim); margin-bottom:2px; }
+  .c-val { font-size:.9rem; color:var(--off-white); font-weight:500; }
+  .c-form .fg { margin-bottom:18px; }
+  .c-form label { display:block; font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; color:var(--dim); margin-bottom:7px; }
+  .c-form input, .c-form textarea, .c-form select {
+    width:100%; background:rgba(255,255,255,.04);
+    border:1px solid rgba(212,175,55,.18); border-radius:2px;
+    padding:13px 15px; color:var(--off-white);
+    font-family:'Inter',sans-serif; font-size:.88rem;
+    outline:none; transition:border-color .25s, background .25s;
+  }
+  .c-form input:focus, .c-form textarea:focus, .c-form select:focus { border-color:var(--gold); background:rgba(212,175,55,.04); }
+  .c-form textarea { min-height:120px; resize:vertical; }
+  .c-form select option { background:var(--charcoal-mid); }
+  .fr { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  footer { background:#080808; border-top:1px solid rgba(212,175,55,.12); padding:56px 48px 28px; }
+  .footer-inner { max-width:1180px; margin:0 auto; }
+  .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:52px; margin-bottom:44px; }
+  .f-brand .nav-logo { font-size:1.3rem; margin-bottom:14px; }
+  .f-brand p { font-size:.82rem; line-height:1.8; color:var(--dim); margin-bottom:18px; }
+  .f-col-t { font-family:'Bebas Neue',sans-serif; font-size:.82rem; letter-spacing:.3em; color:var(--gold); margin-bottom:16px; }
+  .f-links { list-style:none; }
+  .f-links li { margin-bottom:9px; }
+  .f-links a { font-size:.8rem; color:var(--dim); transition:color .2s; }
+  .f-links a:hover { color:var(--gold); }
+  .footer-bot {
+    padding-top:24px; border-top:1px solid rgba(255,255,255,.05);
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+  }
+  .footer-bot p { font-size:.72rem; color:#555; }
+  .footer-bot a { color:var(--gold); }
+
+  /* ═══════════════════════════════════════
+     SCROLL REVEAL
+  ═══════════════════════════════════════ */
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .65s ease, transform .65s ease; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+  @media (max-width:960px) {
+    nav { padding:14px 22px; }
+    .nav-links, .nav-cta { display:none; }
+    .burger { display:flex; }
+    #hero { padding:110px 24px 90px; }
+    .hero-profile-photo { display:none; }
+    .hero-stats { left:24px; }
+    .about-grid, .feat-card, .contact-grid { grid-template-columns:1fr; }
+    .video-grid, .quote-grid, .mini-grid { grid-template-columns:1fr; }
+    .shop-grid { grid-template-columns:1fr; }
+    .wrap { padding:70px 24px; }
+    .footer-top { grid-template-columns:1fr 1fr; }
+    .feat-img { min-height:240px; }
+  }
+  @media (max-width:540px) {
+    .hero-h1 { font-size:2.8rem; }
+    .hero-stats { flex-wrap:wrap; gap:20px; }
+    .footer-top { grid-template-columns:1fr; gap:28px; }
+    .fr { grid-template-columns:1fr; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    *, *::before, *::after { animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LOADER — Realistic spinning drill
+════════════════════════════════════════════ -->
+<div id="loader">
+  <div class="drill-wrap">
+    <!-- Sparks fly from bit tip -->
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+
+    <!-- Full realistic drill SVG -->
+    <svg class="drill-body-group" width="200" height="140" viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- ── Battery pack bottom ── -->
+      <rect x="52" y="104" width="54" height="22" rx="5" fill="#2a2a2a"/>
+      <rect x="55" y="107" width="48" height="8" rx="2" fill="#363636"/>
+      <!-- battery cells -->
+      <rect x="57" y="109" width="10" height="4" rx="1" fill="#D4AF37" opacity=".7"/>
+      <rect x="70" y="109" width="10" height="4" rx="1" fill="#D4AF37" opacity=".7"/>
+      <rect x="83" y="109" width="10" height="4" rx="1" fill="#D4AF37" opacity=".5"/>
+      <rect x="96" y="109" width="8" height="4" rx="1" fill="#555" opacity=".5"/>
+
+      <!-- ── Handle / grip ── -->
+      <rect x="58" y="66" width="42" height="42" rx="8" fill="#222"/>
+      <!-- grip texture lines -->
+      <line x1="64" y1="72" x2="64" y2="102" stroke="#2e2e2e" stroke-width="1.5"/>
+      <line x1="70" y1="70" x2="70" y2="104" stroke="#2e2e2e" stroke-width="1.5"/>
+      <line x1="76" y1="69" x2="76" y2="104" stroke="#2e2e2e" stroke-width="1.5"/>
+      <line x1="82" y1="69" x2="82" y2="104" stroke="#2e2e2e" stroke-width="1.5"/>
+      <line x1="88" y1="70" x2="88" y2="104" stroke="#2e2e2e" stroke-width="1.5"/>
+      <line x1="94" y1="72" x2="94" y2="102" stroke="#2e2e2e" stroke-width="1.5"/>
+      <!-- orange accent band on handle -->
+      <rect x="58" y="86" width="42" height="6" rx="0" fill="#E8621A" opacity=".75"/>
+
+      <!-- ── Trigger ── -->
+      <rect x="72" y="88" width="14" height="16" rx="5" fill="#1a1a1a"/>
+      <rect x="74" y="90" width="10" height="9" rx="3" fill="#0d0d0d"/>
+
+      <!-- ── Main body ── -->
+      <!-- Body shell -->
+      <rect x="22" y="28" width="118" height="46" rx="10" fill="#1f1f1f"/>
+      <!-- Top highlight -->
+      <rect x="22" y="28" width="118" height="16" rx="10" fill="#2c2c2c"/>
+      <rect x="22" y="38" width="118" height="6" fill="#2c2c2c"/>
+      <!-- Brand name plate -->
+      <rect x="34" y="36" width="72" height="18" rx="3" fill="#111"/>
+      <text x="70" y="49" text-anchor="middle" fill="#D4AF37" font-family="Bebas Neue, sans-serif" font-size="10" letter-spacing="2">YESSATHOME</text>
+      <!-- side vent slots -->
+      <line x1="110" y1="34" x2="110" y2="44" stroke="#333" stroke-width="2"/>
+      <line x1="114" y1="34" x2="114" y2="44" stroke="#333" stroke-width="2"/>
+      <line x1="118" y1="34" x2="118" y2="44" stroke="#333" stroke-width="2"/>
+      <line x1="122" y1="34" x2="122" y2="44" stroke="#333" stroke-width="2"/>
+      <!-- body-to-handle join -->
+      <rect x="54" y="64" width="50" height="8" rx="2" fill="#181818"/>
+      <!-- orange accent stripe on body -->
+      <rect x="22" y="65" width="118" height="5" rx="0" fill="#E8621A" opacity=".65"/>
+
+      <!-- ── Chuck (front cylindrical piece) ── -->
+      <rect x="138" y="34" width="20" height="34" rx="5" fill="#3a3a3a"/>
+      <rect x="140" y="34" width="16" height="34" rx="4" fill="#444"/>
+      <!-- chuck ridges -->
+      <line x1="140" y1="40" x2="156" y2="40" stroke="#555" stroke-width="1"/>
+      <line x1="140" y1="46" x2="156" y2="46" stroke="#555" stroke-width="1"/>
+      <line x1="140" y1="52" x2="156" y2="52" stroke="#555" stroke-width="1"/>
+      <line x1="140" y1="58" x2="156" y2="58" stroke="#555" stroke-width="1"/>
+      <!-- silver chuck front ring -->
+      <rect x="154" y="37" width="8" height="28" rx="3" fill="#888"/>
+      <rect x="155" y="39" width="6" height="24" rx="2" fill="#aaa"/>
+
+      <!-- ── Drill bit (spinning group) ── -->
+      <g class="drill-bit-spin">
+        <!-- shank -->
+        <rect x="162" y="46" width="18" height="10" rx="2" fill="#bbb"/>
+        <!-- flute body -->
+        <rect x="180" y="44" width="22" height="5" rx="1" fill="#999"/>
+        <rect x="180" y="53" width="22" height="5" rx="1" fill="#888"/>
+        <!-- flute spiral marks -->
+        <line x1="183" y1="44" x2="188" y2="53" stroke="#777" stroke-width="1"/>
+        <line x1="189" y1="44" x2="194" y2="53" stroke="#777" stroke-width="1"/>
+        <line x1="195" y1="44" x2="200" y2="53" stroke="#777" stroke-width="1"/>
+        <!-- tip point -->
+        <g class="drill-bit-tip">
+          <polygon points="202,47 202,55 210,51" fill="#ccc"/>
+        </g>
+      </g>
+
+      <!-- ── LED light on front of body ── -->
+      <ellipse cx="140" cy="51" rx="4" ry="4" fill="#FFFAAA" opacity=".6" filter="url(#glow)"/>
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="loader-label">YESSATHOME</div>
+  <div class="loader-sub">Loading DIY Magic…</div>
+  <div class="loader-bar-shell"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+════════════════════════════════════════════ -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 26 26" fill="none">
+      <rect x="2" y="11" width="16" height="8" rx="2" fill="#D4AF37"/>
+      <rect x="16" y="13" width="6" height="4" rx="1" fill="#E8621A"/>
+      <rect x="22" y="13.5" width="3" height="3" rx=".5" fill="#B8942E"/>
+      <rect x="5" y="19" width="9" height="6" rx="2" fill="#B8942E"/>
+    </svg>
+    YessAtHome
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://linktr.ee/YessAtHome" target="_blank" class="nav-cta" id="navCta">All Links</a>
+  <div class="burger" id="burger" onclick="toggleBurger()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-photo-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="eyebrow">DIY · Home Improvement · Jacksonville, FL</div>
+    <h1 class="hero-h1">
+      <em>Yess</em> You Can<br/>
+      Build It Yourself
+    </h1>
+    <div class="hero-sub">Custom Cabinets · Patios · Home Makeovers</div>
+    <p class="hero-bio">
+      Meet <strong>Yesenia</strong> — Jacksonville's DIY powerhouse. Navy veteran, wife, mom, and content creator turning budget builds into luxury-feeling homes, one drill at a time.
+    </p>
+    <div class="hero-btns">
+      <a href="#videos" class="btn-pri">Watch Projects</a>
+      <a href="#about" class="btn-out">My Story</a>
+    </div>
+  </div>
+
+  <!-- Real profile photo -->
+  <div class="hero-profile-photo">
+    <div class="hero-photo-corner"></div>
+    <img
+      src="https://ugc.production.linktr.ee/74b79254-b434-45f0-a5e8-5164b1403550_Image.jpeg"
+      alt="Yesenia Lee — YessAtHome"
+      onerror="this.parentElement.style.display='none'"
+    />
+    <div class="hero-photo-frame"></div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">70K+</div><div class="stat-l">Instagram</div></div>
+    <div class="stat"><div class="stat-n">50K+</div><div class="stat-l">TikTok</div></div>
+    <div class="stat"><div class="stat-n">200+</div><div class="stat-l">Projects</div></div>
+  </div>
+
+  <div class="tape-wrap"><div class="tape-inner"></div></div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MARQUEE
+════════════════════════════════════════════ -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>Custom Cabinets</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Patio Design</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Budget Builds</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>Room Remodels</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1a3 3 0 00-6 0c0 .12.11.56.18 1H4v14h16V6z"/></svg>Flooring</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>Video Tutorials</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>Custom Cabinets</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Patio Design</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Budget Builds</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>Room Remodels</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1a3 3 0 00-6 0c0 .12.11.56.18 1H4v14h16V6z"/></svg>Flooring</span>
+    <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>Video Tutorials</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+════════════════════════════════════════════ -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal">
+        <div class="about-photo-corner"></div>
+        <div class="about-photo-corner-br"></div>
+        <div class="about-photo-frame">
+          <img
+            src="https://ugc.production.linktr.ee/74b79254-b434-45f0-a5e8-5164b1403550_Image.jpeg"
+            alt="Yesenia Lee – YessAtHome"
+            onerror="this.style.opacity='.3'"
+          />
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-n">DIY</div>
+          <div class="about-badge-t">Queen of<br/>Jacksonville</div>
+        </div>
+      </div>
+
+      <div class="about-text reveal">
+        <div class="sec-eye">My Story</div>
+        <h2 class="sec-h2">She Picked Up a <em>Drill</em><br/>&amp; Never Looked Back</h2>
+        <div class="gold-line"></div>
+        <p>Hi, I'm <strong>Yesenia</strong> — creator behind <strong>YessAtHome</strong> and your go-to for proving that a beautiful home doesn't require a contractor or a massive budget. I'm a <strong>Navy veteran</strong>, wife, and mom based in <strong>Jacksonville, Florida</strong> who turned a love for home design into a thriving online community.</p>
+        <p>My motto? <strong>"Yess You Can."</strong> Whether it's building custom cabinetry from scratch, transforming a backyard into a resort-style patio, or discovering the best budget materials — I document every step so you can do it too.</p>
+        <p>Follow along on <strong>Instagram · TikTok · YouTube · Facebook · Threads</strong> and let's build something amazing together. 🔨✨</p>
+        <div class="skill-grid">
+          <span class="skill-chip">Custom Cabinets</span>
+          <span class="skill-chip">Patio Design</span>
+          <span class="skill-chip">Woodworking</span>
+          <span class="skill-chip">Flooring</span>
+          <span class="skill-chip">Tile Work</span>
+          <span class="skill-chip">Budget Builds</span>
+          <span class="skill-chip">Furniture Flips</span>
+          <span class="skill-chip">Landscaping</span>
+        </div>
+        <div class="social-row">
+          <a href="https://www.instagram.com/yessathome" target="_blank" class="soc-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="https://www.tiktok.com/@yessathome" target="_blank" class="soc-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.19a8.17 8.17 0 004.79 1.54V7.27a4.85 4.85 0 01-1.02-.58z"/></svg>
+            TikTok
+          </a>
+          <a href="https://www.youtube.com/@YessAtHome" target="_blank" class="soc-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     VIDEOS
+════════════════════════════════════════════ -->
+<section id="videos">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eye">Popular Projects</div>
+      <h2 class="sec-h2">Watch the <em>Magic</em> Happen</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="video-grid">
+      <!-- Real YouTube thumbnail from Linktree -->
+      <a href="https://www.youtube.com/@YessAtHome" target="_blank" class="vid-card reveal">
+        <div class="vid-thumb">
+          <img
+            src="https://ugc.production.linktr.ee/7e7196dc-2b18-4af9-8146-22a4504ab900_Gn9f8EI3Qxtz8IF4Nl96-gar0pVOtIai4zq-QPHq4HPM6MzzpfBuCp753LKfBbcUzCufevyqsg-s800-c-k-c0x00ffffff-no-r.jpeg"
+            alt="YessAtHome YouTube"
+            onerror="this.style.opacity='.2'"
+          />
+          <div class="vid-play"><div class="play-ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat">Latest Video</div>
+          <div class="vid-title">Full DIY Build — Watch the Latest Project on YouTube</div>
+          <div class="vid-meta"><span>🔨 Yesenia Lee</span><span>📍 Jacksonville</span></div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/@YessAtHome" target="_blank" class="vid-card reveal">
+        <div class="vid-thumb" style="background:linear-gradient(135deg,#1a1208,#0f1a10)">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+            <svg width="90" height="70" viewBox="0 0 90 70" fill="none">
+              <rect x="8" y="15" width="74" height="40" rx="5" fill="rgba(212,175,55,.15)" stroke="rgba(212,175,55,.3)" stroke-width="1"/>
+              <line x1="8" y1="35" x2="82" y2="35" stroke="rgba(212,175,55,.2)" stroke-width="1"/>
+              <line x1="45" y1="15" x2="45" y2="55" stroke="rgba(212,175,55,.2)" stroke-width="1"/>
+              <rect x="28" y="23" width="13" height="6" rx="2" fill="rgba(232,98,26,.5)"/>
+              <rect x="49" y="23" width="13" height="6" rx="2" fill="rgba(232,98,26,.5)"/>
+              <rect x="28" y="42" width="13" height="6" rx="2" fill="rgba(232,98,26,.5)"/>
+              <rect x="49" y="42" width="13" height="6" rx="2" fill="rgba(232,98,26,.5)"/>
+            </svg>
+          </div>
+          <div class="vid-play"><div class="play-ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat">Cabinet Build</div>
+          <div class="vid-title">DIY Custom Kitchen Cabinets — Full Build from Scratch</div>
+          <div class="vid-meta"><span>🪵 Woodworking</span><span>💰 Budget Build</span></div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/@YessAtHome" target="_blank" class="vid-card reveal">
+        <div class="vid-thumb" style="background:linear-gradient(135deg,#0f1a10,#1a2a15)">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+            <svg width="90" height="70" viewBox="0 0 90 70" fill="none">
+              <rect x="5" y="30" width="80" height="30" rx="4" fill="rgba(139,158,126,.2)" stroke="rgba(139,158,126,.3)" stroke-width="1"/>
+              <rect x="5" y="18" width="80" height="16" rx="3" fill="rgba(212,175,55,.15)" stroke="rgba(212,175,55,.25)" stroke-width="1"/>
+              <rect x="12" y="60" width="14" height="10" rx="2" fill="rgba(232,98,26,.3)"/>
+              <rect x="64" y="60" width="14" height="10" rx="2" fill="rgba(232,98,26,.3)"/>
+              <circle cx="45" cy="45" r="8" fill="none" stroke="rgba(212,175,55,.3)" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="vid-play"><div class="play-ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat">Outdoor Living</div>
+          <div class="vid-title">Backyard Patio Transformation — Before &amp; After Reveal</div>
+          <div class="vid-meta"><span>🌿 Landscape</span><span>⏱ Weekend Build</span></div>
+        </div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:44px">
+      <a href="https://www.youtube.com/@YessAtHome" target="_blank" class="btn-out">View All on YouTube →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROJECTS
+════════════════════════════════════════════ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eye">Signature Work</div>
+      <h2 class="sec-h2">Featured <em>Builds</em></h2>
+      <div class="gold-line"></div>
+    </div>
+
+    <div class="feat-card reveal">
+      <div class="feat-img">
+        <img
+          src="https://ugc.production.linktr.ee/7e7196dc-2b18-4af9-8146-22a4504ab900_Gn9f8EI3Qxtz8IF4Nl96-gar0pVOtIai4zq-QPHq4HPM6MzzpfBuCp753LKfBbcUzCufevyqsg-s800-c-k-c0x00ffffff-no-r.jpeg"
+          alt="YessAtHome Featured Build"
+          onerror="this.style.opacity='.2'"
+        />
+        <div class="feat-img-overlay"></div>
+        <div class="feat-badge">⭐ Fan Favorite</div>
+      </div>
+      <div class="feat-body">
+        <div class="sec-eye">Full Kitchen Overhaul</div>
+        <h3>Floor-to-Ceiling Custom Cabinetry</h3>
+        <p>Starting with raw lumber and a vision, Yesenia transformed a builder-grade kitchen into a showroom-worthy space. Every cabinet was designed, measured, cut, and installed by hand — no contractor, no shortcuts, just skill and determination.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Woodworking</span>
+          <span class="proj-tag">Budget Friendly</span>
+          <span class="proj-tag">3-Weekend Build</span>
+          <span class="proj-tag">Jacksonville, FL</span>
+        </div>
+        <a href="https://www.youtube.com/@YessAtHome" target="_blank" class="btn-pri" style="display:inline-block;width:fit-content">Watch Full Build →</a>
+      </div>
+    </div>
+
+    <div class="mini-grid">
+      <div class="vid-card reveal" style="cursor:default">
+        <div class="vid-thumb" style="background:linear-gradient(135deg,#0f1520,#1a2030);display:flex;align-items:center;justify-content:center">
+          <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+            <rect x="10" y="10" width="60" height="40" rx="4" fill="rgba(212,175,55,.12)" stroke="rgba(212,175,55,.25)" stroke-width="1"/>
+            <rect x="15" y="15" width="22" height="14" rx="2" fill="rgba(232,98,26,.3)"/>
+            <rect x="43" y="15" width="22" height="14" rx="2" fill="rgba(232,98,26,.3)"/>
+            <rect x="15" y="33" width="50" height="12" rx="2" fill="rgba(139,158,126,.2)"/>
+          </svg>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat">Outdoor Living</div>
+          <div class="vid-title">Pergola &amp; Outdoor Bar Build</div>
+          <div class="vid-meta"><span>🌴 Patio</span><span>💰 Under $600</span></div>
+        </div>
+      </div>
+      <div class="vid-card reveal" style="cursor:default">
+        <div class="vid-thumb" style="background:linear-gradient(135deg,#201015,#1a0f18);display:flex;align-items:center;justify-content:center">
+          <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+            <rect x="20" y="5" width="40" height="50" rx="3" fill="rgba(212,175,55,.1)" stroke="rgba(212,175,55,.25)" stroke-width="1"/>
+            <rect x="25" y="10" width="30" height="8" rx="2" fill="rgba(232,98,26,.3)"/>
+            <rect x="25" y="22" width="30" height="8" rx="2" fill="rgba(232,98,26,.3)"/>
+            <rect x="25" y="34" width="30" height="8" rx="2" fill="rgba(139,158,126,.3)"/>
+            <circle cx="40" cy="46" r="4" fill="rgba(212,175,55,.4)"/>
+          </svg>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat">Pantry Makeover</div>
+          <div class="vid-title">Pantry Organization + Wallpaper Reveal</div>
+          <div class="vid-meta"><span>🏡 Interior</span><span>✨ Peel &amp; Stick</span></div>
+        </div>
+      </div>
+      <div class="vid-card reveal" style="cursor:default">
+        <div class="vid-thumb" style="background:linear-gradient(135deg,#1a1208,#221a08);display:flex;align-items:center;justify-content:center">
+          <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+            <ellipse cx="40" cy="50" rx="32" ry="4" fill="rgba(139,158,126,.15)"/>
+            <rect x="10" y="30" width="60" height="20" rx="3" fill="rgba(212,175,55,.12)" stroke="rgba(212,175,55,.25)" stroke-width="1"/>
+            <rect x="16" y="15" width="48" height="18" rx="3" fill="rgba(232,98,26,.15)" stroke="rgba(232,98,26,.3)" stroke-width="1"/>
+            <rect x="24" y="8" width="32" height="10" rx="2" fill="rgba(212,175,55,.2)"/>
+          </svg>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat">Furniture Flip</div>
+          <div class="vid-title">Dining Table Makeover — Facebook Marketplace Find</div>
+          <div class="vid-meta"><span>🖤 Stain &amp; Paint</span><span>🔄 Flip</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SHOP
+════════════════════════════════════════════ -->
+<section id="shop">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eye">Shop My Picks</div>
+      <h2 class="sec-h2">Tools &amp; Products <em>I Trust</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="shop-grid">
+      <a href="https://www.amazon.com/shop/yesenialee" target="_blank" class="shop-card reveal">
+        <div class="shop-ic"><svg viewBox="0 0 24 24" fill="rgba(212,175,55,.9)"><path d="M21 9l-1.5-4.5h-15L3 9v2h1v7h16v-7h1V9zM8 17H5v-5h3v5zm4 0h-2v-5h2v5zm4 0h-3v-5h3v5z"/></svg></div>
+        <div><div class="shop-t">Amazon Storefront</div><div class="shop-d">All my favorite tools, materials & home finds</div></div>
+        <div class="shop-arrow">→</div>
+      </a>
+      <a href="https://www.shopltk.com/explore/yessathome" target="_blank" class="shop-card reveal">
+        <div class="shop-ic"><svg viewBox="0 0 24 24" fill="rgba(212,175,55,.9)"><circle cx="12" cy="10" r="4"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div>
+        <div><div class="shop-t">LTK Shop</div><div class="shop-d">Shoppable links from every room reveal</div></div>
+        <div class="shop-arrow">→</div>
+      </a>
+      <a href="http://bit.ly/4cgk78s" target="_blank" class="shop-card reveal">
+        <div class="shop-ic"><svg viewBox="0 0 24 24" fill="rgba(212,175,55,.9)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <div><div class="shop-t">Shabebe Rock Glue 🪨</div><div class="shop-d">My go-to epoxy resin — used in multiple projects</div></div>
+        <div class="shop-arrow">→</div>
+      </a>
+      <a href="https://lvnta.com/lv_pHW1NpZYNkKb11ZKqW" target="_blank" class="shop-card reveal">
+        <div class="shop-ic"><svg viewBox="0 0 24 24" fill="rgba(212,175,55,.9)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18h-2v1.93C7.06 19.44 4.56 16.94 4.07 14H6v-2H4.07C4.56 9.06 7.06 6.56 10 6.07V8h2V6.07C14.94 6.56 17.44 9.06 17.93 12H16v2h1.93c-.49 2.94-2.99 5.44-5.93 5.93z"/></svg></div>
+        <div><div class="shop-t">iSpring Water Filter</div><div class="shop-d">Reverse osmosis — clean water for the family</div></div>
+        <div class="shop-arrow">→</div>
+      </a>
+      <a href="http://govee.sjv.io/7aPRzV" target="_blank" class="shop-card reveal">
+        <div class="shop-ic"><svg viewBox="0 0 24 24" fill="rgba(212,175,55,.9)"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+        <div><div class="shop-t">Govee Smart Lighting</div><div class="shop-d">Ambient lighting to finish every room transformation</div></div>
+        <div class="shop-arrow">→</div>
+      </a>
+      <a href="https://linktr.ee/YessAtHome" target="_blank" class="shop-card reveal">
+        <div class="shop-ic"><svg viewBox="0 0 24 24" fill="rgba(212,175,55,.9)"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></div>
+        <div><div class="shop-t">All Links — Linktree</div><div class="shop-d">Socials, shops, partnerships — all in one place</div></div>
+        <div class="shop-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     COMMUNITY
+════════════════════════════════════════════ -->
+<section id="community">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eye">The Community</div>
+      <h2 class="sec-h2">What the <em>YessAtHome</em> Family Says</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="quote-grid">
+      <div class="q-card reveal">
+        <div class="q-mark">"</div>
+        <div class="q-stars">★★★★★</div>
+        <div class="q-text">I built my first floating shelves after watching her video. She makes it so approachable — no experience needed, just follow along!</div>
+        <div class="q-author">@maria_builds_fl · Instagram</div>
+      </div>
+      <div class="q-card reveal">
+        <div class="q-mark">"</div>
+        <div class="q-stars">★★★★★</div>
+        <div class="q-text">Her patio build inspired me to redo our entire backyard. Saved over $8,000 by doing it ourselves. Her product recs are always on point.</div>
+        <div class="q-author">@diydave_jax · TikTok</div>
+      </div>
+      <div class="q-card reveal">
+        <div class="q-mark">"</div>
+        <div class="q-stars">★★★★★</div>
+        <div class="q-text">Yess doesn't just show the pretty reveal — she shows every mistake and how to fix it. That's what makes her content genuinely useful.</div>
+        <div class="q-author">@homequeen2024 · YouTube</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:52px" class="reveal">
+      <p style="font-size:.88rem;color:var(--dim);margin-bottom:18px">Tag <strong style="color:var(--gold)">#YessAtHome</strong> in your builds to be featured!</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="https://www.instagram.com/yessathome" target="_blank" class="btn-pri">Follow on Instagram</a>
+        <a href="https://www.tiktok.com/@yessathome" target="_blank" class="btn-out">Follow on TikTok</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eye">Get In Touch</div>
+      <h2 class="sec-h2">Let's Work <em>Together</em></h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="c-info reveal">
+        <p>Whether you're a brand interested in a collaboration, a fellow DIYer with a question, or just a fan — Yesenia's inbox is open. Let's build something amazing.</p>
+        <div class="c-detail">
+          <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="c-lbl">Business Email</div><div class="c-val">homewithyesslee@gmail.com</div></div>
+        </div>
+        <div class="c-detail">
+          <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="c-lbl">Location</div><div class="c-val">Jacksonville, Florida</div></div>
+        </div>
+        <div class="c-detail">
+          <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div><div class="c-lbl">Collabs</div><div class="c-val">Open to brand partnerships &amp; sponsored content</div></div>
+        </div>
+        <div style="margin-top:28px">
+          <a href="https://cash.app/$Yesylee" target="_blank" class="btn-out" style="display:inline-flex;align-items:center;gap:8px">☕ Buy Me a Coffee</a>
+        </div>
+      </div>
+      <div class="c-form reveal">
+        <div class="fr">
+          <div class="fg"><label>First Name</label><input type="text" placeholder="Jane"/></div>
+          <div class="fg"><label>Last Name</label><input type="text" placeholder="Smith"/></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="jane@example.com"/></div>
+        <div class="fg">
+          <label>Inquiry Type</label>
+          <select><option value="">Select one…</option><option>Brand Collaboration</option><option>Sponsored Content</option><option>Product Review</option><option>General Question</option><option>DIY Advice</option></select>
+        </div>
+        <div class="fg"><label>Message</label><textarea placeholder="Tell me about your project or partnership idea…"></textarea></div>
+        <button onclick="handleSend(this)" style="width:100%;border:none;cursor:pointer" class="btn-pri">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="f-brand">
+        <div class="nav-logo" style="margin-bottom:14px">
+          <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
+            <rect x="2" y="11" width="16" height="8" rx="2" fill="#D4AF37"/>
+            <rect x="16" y="13" width="6" height="4" rx="1" fill="#E8621A"/>
+            <rect x="22" y="13.5" width="3" height="3" rx=".5" fill="#B8942E"/>
+            <rect x="5" y="19" width="9" height="6" rx="2" fill="#B8942E"/>
+          </svg>
+          YessAtHome
+        </div>
+        <p>Jacksonville's favorite DIY creator. Proving luxury is earned by hand, one project at a time. ⚒️</p>
+        <p style="color:#444;font-size:.72rem">homewithyesslee@gmail.com</p>
+      </div>
+      <div>
+        <div class="f-col-t">Navigate</div>
+        <ul class="f-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#videos">Videos</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#shop">Shop</a></li>
+          <li><a href="#community">Community</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-t">Social</div>
+        <ul class="f-links">
+          <li><a href="https://www.instagram.com/yessathome" target="_blank">Instagram</a></li>
+          <li><a href="https://www.tiktok.com/@yessathome" target="_blank">TikTok</a></li>
+          <li><a href="https://www.youtube.com/@YessAtHome" target="_blank">YouTube</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61564346953617" target="_blank">Facebook</a></li>
+          <li><a href="https://www.threads.com/@yessathome" target="_blank">Threads</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-t">Shop</div>
+        <ul class="f-links">
+          <li><a href="https://www.amazon.com/shop/yesenialee" target="_blank">Amazon Storefront</a></li>
+          <li><a href="https://www.shopltk.com/explore/yessathome" target="_blank">LTK Shop</a></li>
+          <li><a href="http://govee.sjv.io/7aPRzV" target="_blank">Govee Lighting</a></li>
+          <li><a href="http://bit.ly/4cgk78s" target="_blank">Shabebe Glue</a></li>
+          <li><a href="https://cash.app/$Yesylee" target="_blank">Buy Me a Coffee ☕</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <p>© 2025 YessAtHome · Yesenia Lee · Jacksonville, FL · <a href="mailto:homewithyesslee@gmail.com">homewithyesslee@gmail.com</a></p>
+      <p>Built with ❤️ &amp; power tools</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Loader ──
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('out'), 2200);
+  });
+
+  // ── Scroll reveal ──
+  const revs = document.querySelectorAll('.reveal');
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 70);
+        revObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.09 });
+  revs.forEach(r => revObs.observe(r));
+
+  // ── Nav shrink on scroll ──
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').style.padding = window.scrollY > 50 ? '10px 56px' : '16px 56px';
+  });
+
+  // ── Smooth scroll ──
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); if (menuOpen) toggleBurger(); }
+    });
+  });
+
+  // ── Mobile menu ──
+  let menuOpen = false;
+  function toggleBurger() {
+    menuOpen = !menuOpen;
+    const nl = document.getElementById('navLinks');
+    const nc = document.getElementById('navCta');
+    if (menuOpen) {
+      nl.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:64px;left:0;right:0;background:rgba(8,8,8,.97);padding:22px 22px 28px;gap:18px;border-bottom:1px solid rgba(212,175,55,.15);z-index:999;backdrop-filter:blur(14px)';
+      nc.style.cssText = 'display:block;position:fixed;top:64px;left:0;right:0;z-index:998;margin:112px 22px 0;text-align:center;padding:12px;';
+    } else {
+      nl.style.cssText = '';
+      nc.style.cssText = '';
+    }
+  }
+
+  // ── Contact form ──
+  function handleSend(btn) {
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = 'var(--sage)';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
