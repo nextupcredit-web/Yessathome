@@ -1,82 +1,62 @@
 # YessAtHome — Official Website
 
-Premium website for **Yesenia Lee** (@yessathome), Jacksonville-based DIY content creator.
+Premium single-page website for **Yesenia Lee** (@yessathome), Jacksonville-based DIY content creator.
 
-**Live site:** https://[your-username].github.io/yessathome
-
----
-
-## 🚀 Deploy to GitHub Pages (step-by-step)
-
-### Option A — Upload via GitHub.com (easiest, no coding needed)
-
-1. Go to [github.com](https://github.com) and sign in (or create a free account)
-2. Click the **+** button (top right) → **New repository**
-3. Name it: `yessathome` (or anything you like)
-4. Set it to **Public**
-5. Click **Create repository**
-6. On the next screen click **uploading an existing file**
-7. Drag and drop all 3 files from this folder:
-   - `index.html`
-   - `README.md`
-   - `.nojekyll`
-8. Click **Commit changes**
-9. Go to **Settings** → **Pages** (left sidebar)
-10. Under **Branch**, select `main` → `/ (root)` → click **Save**
-11. Wait ~60 seconds, then visit: `https://[your-github-username].github.io/yessathome`
-
-✅ Done! Your site is live.
+**Live site:** https://[your-github-username].github.io/yessathome
 
 ---
 
-### Option B — Via Git CLI
+## 🚀 Deploy to GitHub Pages (no coding needed)
 
-```bash
-git init
-git add .
-git commit -m "Initial YessAtHome website"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/yessathome.git
-git push -u origin main
-```
-
-Then enable Pages in repo Settings → Pages → Branch: main / root → Save.
+1. Go to [github.com](https://github.com) → sign in or create free account
+2. Click **+** (top right) → **New repository**
+3. Name it `yessathome` → set **Public** → click **Create repository**
+4. Click **"uploading an existing file"**
+5. Drag all 3 files in: `index.html`, `README.md`, `.nojekyll`
+6. Click **Commit changes**
+7. Go to **Settings** → **Pages** → Branch: `main` / `root` → **Save**
+8. Wait ~60 sec → visit `https://[your-username].github.io/yessathome`
 
 ---
 
-## 📁 File structure
+## 📁 Files
 
 ```
 yessathome/
-├── index.html      ← Full website (single file)
-├── README.md       ← This file
-└── .nojekyll       ← Tells GitHub Pages not to use Jekyll
+├── index.html    ← Full website (single file, everything included)
+├── README.md     ← This file
+└── .nojekyll     ← Prevents GitHub from breaking CSS/fonts
 ```
 
-## 🎨 Built with
+## ✅ What's in this version
 
-- Pure HTML + CSS + vanilla JS (no frameworks, no build step)
-- Fonts: Playfair Display · Inter · Bebas Neue (Google Fonts)
-- Images: Yesenia's real Linktree CDN assets
-- Animations: CSS keyframes + SVG
+- **Loader** — Photorealistic animated drill with spinning bit, gold spark particles, branded "YESSATHOME" label
+- **Hero** — Her real Linktree photo as background (lighter, warmer, golden-hour feel) + portrait on right
+- **Videos** — Her actual YouTube channel playlist embedded, plays on-site without leaving
+- **About** — Real profile photo with glowing blurry shadow halo effect
+- **Projects** — Real YouTube thumbnail + project cards
+- **Shop** — All 6 Linktree product links (Amazon, LTK, Govee, Shabebe, iSpring, Linktree)
+- **Community** — Fan quote section
+- **Contact** — Form + real email + Buy Me a Coffee link
+- **Logo** — Photorealistic 3D-shaded drill SVG (not cartoon)
+- **No marquee** — Removed as requested
+- **Scroll reveal** — Sections fade up as you scroll
 
-## 🔗 Links embedded
+## 🔗 All Real Links
 
 | Destination | URL |
 |---|---|
-| Instagram | @yessathome |
-| TikTok | @yessathome |
-| YouTube | @YessAtHome |
+| Instagram | instagram.com/yessathome |
+| TikTok | tiktok.com/@yessathome |
+| YouTube | youtube.com/@YessAtHome |
 | Facebook | facebook.com/profile.php?id=61564346953617 |
-| Threads | @yessathome |
+| Threads | threads.com/@yessathome |
 | Amazon Shop | amazon.com/shop/yesenialee |
 | LTK Shop | shopltk.com/explore/yessathome |
-| Govee Lighting | govee.sjv.io/7aPRzV |
+| Govee | govee.sjv.io/7aPRzV |
 | Shabebe Glue | bit.ly/4cgk78s |
 | iSpring Filter | lvnta.com/lv_pHW1NpZYNkKb11ZKqW |
-| Buy Me a Coffee | cash.app/$Yesylee |
-| Linktree | linktr.ee/YessAtHome |
-
----
+| Coffee | cash.app/$Yesylee |
+| Email | homewithyesslee@gmail.com |
 
 *© 2025 YessAtHome · Yesenia Lee · Jacksonville, Florida*
