@@ -138,13 +138,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 52px;display:f
 
 /* ══ VIDEOS ══ */
 #videos{background:var(--char)}
-/* Full-width YouTube embed — Shorts are vertical so cap width */
-.yt-feature{width:100%;max-width:420px;margin:0 auto 32px;aspect-ratio:9/16;border-radius:6px;overflow:hidden;border:1px solid rgba(212,175,55,.2);background:#000;box-shadow:0 12px 50px rgba(0,0,0,.6)}
-.yt-feature iframe{width:100%;height:100%;border:none;display:block}
-/* Loading placeholder */
-.yt-loading{width:100%;aspect-ratio:9/16;max-width:420px;margin:0 auto 32px;border-radius:6px;background:var(--char2);border:1px solid rgba(212,175,55,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.yt-loading svg{width:56px;height:56px;fill:rgba(212,175,55,.4)}
-.yt-loading p{font-size:.85rem;color:var(--dim);letter-spacing:.06em}
 /* 3-col Shorts grid — portrait cards */
 .vid-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .vid-embed-card{background:var(--char2);border:1px solid rgba(212,175,55,.1);border-radius:5px;overflow:hidden;transition:transform .3s,border-color .3s}
@@ -517,23 +510,14 @@ footer{background:#07060a;border-top:1px solid rgba(212,175,55,.12);padding:52px
       <div class="sec-eye">Watch &amp; Learn</div>
       <h2 class="sec-h2">Latest Videos — <em>Play Right Here</em></h2>
       <div class="gline"></div>
-      <p style="font-size:.95rem;line-height:1.8;color:var(--dim)">Yesenia's YouTube videos play directly on this page. Hit play below — no redirects needed.</p>
+      <p style="font-size:.95rem;line-height:1.8;color:var(--dim)">Yesenia's YouTube Shorts play directly on this page — hit play, no redirects needed.</p>
     </div>
 
-    <!-- BIG featured embed — JS loads her latest real video ID from RSS at runtime -->
-    <div id="ytFeatureWrap" class="reveal">
-      <!-- Shown while JS fetches the real video -->
-      <div class="yt-loading" id="ytLoadingMain">
-        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/></svg>
-        <p>Loading latest video from YouTube…</p>
-      </div>
-    </div>
-
-    <!-- 3-col grid of 3 more videos — JS populates these too -->
-    <div class="vid-grid-3 reveal" style="margin-top:8px" id="ytGrid">
-      <div class="vid-embed-card" id="ytCard1"><div style="aspect-ratio:16/9;background:var(--char2);display:flex;align-items:center;justify-content:center"><span style="color:var(--dim);font-size:.8rem">Loading…</span></div><div class="vc-info"><div class="vc-cat">Loading</div><div class="vc-title">…</div></div></div>
-      <div class="vid-embed-card" id="ytCard2"><div style="aspect-ratio:16/9;background:var(--char2);display:flex;align-items:center;justify-content:center"><span style="color:var(--dim);font-size:.8rem">Loading…</span></div><div class="vc-info"><div class="vc-cat">Loading</div><div class="vc-title">…</div></div></div>
-      <div class="vid-embed-card" id="ytCard3"><div style="aspect-ratio:16/9;background:var(--char2);display:flex;align-items:center;justify-content:center"><span style="color:var(--dim);font-size:.8rem">Loading…</span></div><div class="vc-info"><div class="vc-cat">Loading</div><div class="vc-title">…</div></div></div>
+    <!-- 3 confirmed YouTube Shorts, each unique, populated by JS -->
+    <div class="vid-grid-3 reveal" id="ytGrid">
+      <div class="vid-embed-card" id="ytCard1"><div style="aspect-ratio:9/16;background:var(--char2);display:flex;align-items:center;justify-content:center"><span style="color:var(--dim);font-size:.8rem">Loading…</span></div></div>
+      <div class="vid-embed-card" id="ytCard2"><div style="aspect-ratio:9/16;background:var(--char2);display:flex;align-items:center;justify-content:center"><span style="color:var(--dim);font-size:.8rem">Loading…</span></div></div>
+      <div class="vid-embed-card" id="ytCard3"><div style="aspect-ratio:9/16;background:var(--char2);display:flex;align-items:center;justify-content:center"><span style="color:var(--dim);font-size:.8rem">Loading…</span></div></div>
     </div>
 
     <div style="text-align:center;margin-top:36px" class="reveal">
@@ -751,37 +735,18 @@ window.addEventListener('load', () => {
 })();
 
 /* ══════════════════════════════════════════════════════
-   YOUTUBE VIDEOS — 3 real confirmed Shorts from @YessAtHome
+   YOUTUBE VIDEOS — 3 confirmed Shorts from @YessAtHome
    pf0RBAXST08 · Q10ZKZ1xbb0 · 8ajqqoowehg
 ════════════════════════════════════════════════════════ */
 (function embedYouTubeVideos() {
-  // Her 3 confirmed YouTube Shorts, each a unique video
   const VIDEOS = [
-    { id: 'pf0RBAXST08', cat: 'DIY Build',      title: 'Yesenia Lee — YessAtHome DIY Short' },
-    { id: 'Q10ZKZ1xbb0', cat: 'Home Project',   title: 'Yesenia Lee — YessAtHome Home Project' },
-    { id: '8ajqqoowehg', cat: 'Room Makeover',  title: 'Yesenia Lee — YessAtHome Room Makeover' },
+    { id: 'pf0RBAXST08', cat: 'DIY Build',     title: 'Yesenia Lee — YessAtHome DIY Short'      },
+    { id: 'Q10ZKZ1xbb0', cat: 'Home Project',  title: 'Yesenia Lee — YessAtHome Home Project'   },
+    { id: '8ajqqoowehg', cat: 'Room Makeover', title: 'Yesenia Lee — YessAtHome Room Makeover'  },
   ];
-
-  const BASE = 'https://www.youtube-nocookie.com/embed/';
+  const BASE   = 'https://www.youtube-nocookie.com/embed/';
   const PARAMS = '?rel=0&modestbranding=1&color=white&iv_load_policy=3';
 
-  // Big featured embed — first video
-  const wrap   = document.getElementById('ytFeatureWrap');
-  const loader = document.getElementById('ytLoadingMain');
-  if (wrap) {
-    loader?.remove();
-    wrap.innerHTML = `
-      <div class="yt-feature">
-        <iframe
-          src="${BASE}${VIDEOS[0].id}${PARAMS}"
-          title="${VIDEOS[0].title}"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy">
-        </iframe>
-      </div>`;
-  }
-
-  // 3 grid cards — each a DIFFERENT video
   ['ytCard1','ytCard2','ytCard3'].forEach((cardId, i) => {
     const card = document.getElementById(cardId);
     const v    = VIDEOS[i];
@@ -790,7 +755,7 @@ window.addEventListener('load', () => {
       <iframe
         src="${BASE}${v.id}${PARAMS}"
         title="${v.title}"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen loading="lazy"
         style="width:100%;aspect-ratio:9/16;border:none;display:block">
       </iframe>
