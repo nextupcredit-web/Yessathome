@@ -1,49 +1,58 @@
-[README (1).md](https://github.com/user-attachments/files/29401125/README.1.md)
 # YessAtHome — Official Website
 
-Premium single-page website for **Yesenia Lee** (@yessathome), Jacksonville-based DIY content creator.
+Premium DIY home improvement website for **Yesenia Lee** (@yessathome), Jacksonville-based content creator.
 
-**Live site:** https://[your-github-username].github.io/yessathome
-
----
-
-## 🚀 Deploy to GitHub Pages (no coding needed)
-
-1. Go to [github.com](https://github.com) → sign in or create free account
-2. Click **+** (top right) → **New repository**
-3. Name it `yessathome` → set **Public** → click **Create repository**
-4. Click **"uploading an existing file"**
-5. Drag all 3 files in: `index.html`, `README.md`, `.nojekyll`
-6. Click **Commit changes**
-7. Go to **Settings** → **Pages** → Branch: `main` / `root` → **Save**
-8. Wait ~60 sec → visit `https://[your-username].github.io/yessathome`
+🌐 **Live site:** https://yessathome.com
 
 ---
 
-## 📁 Files
+## 📁 Files — upload all 3 to GitHub
 
 ```
 yessathome/
-├── index.html    ← Full website (single file, everything included)
+├── index.html    ← Full website (everything in one file)
 ├── README.md     ← This file
-└── .nojekyll     ← Prevents GitHub from breaking CSS/fonts
+└── .nojekyll     ← Required: stops GitHub from breaking CSS/fonts
 ```
 
-## ✅ What's in this version
+---
 
-- **Loader** — Photorealistic animated drill with spinning bit, gold spark particles, branded "YESSATHOME" label
-- **Hero** — Her real Linktree photo as background (lighter, warmer, golden-hour feel) + portrait on right
-- **Videos** — Her actual YouTube channel playlist embedded, plays on-site without leaving
-- **About** — Real profile photo with glowing blurry shadow halo effect
-- **Projects** — Real YouTube thumbnail + project cards
-- **Shop** — All 6 Linktree product links (Amazon, LTK, Govee, Shabebe, iSpring, Linktree)
-- **Community** — Fan quote section
-- **Contact** — Form + real email + Buy Me a Coffee link
-- **Logo** — Photorealistic 3D-shaded drill SVG (not cartoon)
-- **No marquee** — Removed as requested
-- **Scroll reveal** — Sections fade up as you scroll
+## 🚀 How to update / redeploy
 
-## 🔗 All Real Links
+1. Go to your GitHub repo
+2. Click `index.html` → pencil icon (Edit) → paste new code → **Commit changes**
+3. Site updates live at **yessathome.com** within ~60 seconds
+
+---
+
+## ✅ What's on the site
+
+| Section | Content |
+|---|---|
+| **Hero** | Woodworking video background (Pexels), animated measuring tape, stats |
+| **About** | Yesenia's real profile photo, bio, skill chips, social links |
+| **Videos** | 3 YouTube Shorts embedded & playing on-site (no redirect) |
+| **Projects** | Cabinet build (real YouTube thumbnail) + viral stats (990K, 181K, 15.7K) |
+| **Shop** | All 6 Linktree products: Amazon, LTK, Govee, Shabebe, iSpring, Linktree |
+| **Community** | Fan quote cards |
+| **Contact** | Form → Formspree (xqevqwgd) → delivers to homewithyesslee@gmail.com |
+| **Footer** | All socials + shop links |
+
+---
+
+## 🎬 YouTube Shorts embedded
+
+| Video ID | Category |
+|---|---|
+| `pf0RBAXST08` | DIY Build |
+| `Q10ZKZ1xbb0` | Home Project |
+| `8ajqqoowehg` | Room Makeover |
+
+To swap videos: open `index.html`, find `const VIDEOS = [` and replace the `id` values with new YouTube video IDs.
+
+---
+
+## 🔗 All links
 
 | Destination | URL |
 |---|---|
@@ -58,6 +67,19 @@ yessathome/
 | Shabebe Glue | bit.ly/4cgk78s |
 | iSpring Filter | lvnta.com/lv_pHW1NpZYNkKb11ZKqW |
 | Coffee | cash.app/$Yesylee |
-| Email | homewithyesslee@gmail.com |
+| Contact email | homewithyesslee@gmail.com |
+| Form endpoint | formspree.io/f/xqevqwgd |
+
+---
+
+## 🌐 DNS (GoDaddy → GitHub Pages)
+
+| Type | Name | Value |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | nextupcredit-web.github.io |
 
 *© 2025 YessAtHome · Yesenia Lee · Jacksonville, Florida*
