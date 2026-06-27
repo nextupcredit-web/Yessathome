@@ -1,4 +1,3 @@
-[README (2).md](https://github.com/user-attachments/files/29401330/README.2.md)
 # YessAtHome — Official Website
 
 Premium DIY home improvement website for **Yesenia Lee** (@yessathome), Jacksonville-based content creator.
