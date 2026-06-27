@@ -676,16 +676,25 @@ footer{background:#07060a;border-top:1px solid rgba(212,175,55,.12);padding:52px
         <div class="cd"><div class="cd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div><div class="cd-l">Collabs</div><div class="cd-v">Open to brand partnerships &amp; sponsored content</div></div></div>
         <div style="margin-top:26px"><a href="https://cash.app/$Yesylee" target="_blank" class="btn-out" style="display:inline-flex;align-items:center;gap:8px">☕ Buy Me a Coffee</a></div>
       </div>
-      <div class="cf reveal">
+      <form class="cf reveal" action="https://formspree.io/f/xqevqwgd" method="POST">
         <div class="fr2">
-          <div class="fg"><label>First Name</label><input type="text" placeholder="Jane"/></div>
-          <div class="fg"><label>Last Name</label><input type="text" placeholder="Smith"/></div>
+          <div class="fg"><label>First Name</label><input type="text" name="first_name" placeholder="Jane" required/></div>
+          <div class="fg"><label>Last Name</label><input type="text" name="last_name" placeholder="Smith" required/></div>
         </div>
-        <div class="fg"><label>Email</label><input type="email" placeholder="jane@example.com"/></div>
-        <div class="fg"><label>Inquiry Type</label><select><option value="">Select one…</option><option>Brand Collaboration</option><option>Sponsored Content</option><option>Product Review</option><option>General Question</option><option>DIY Advice</option></select></div>
-        <div class="fg"><label>Message</label><textarea placeholder="Tell me about your project or partnership idea…"></textarea></div>
-        <button onclick="handleSend(this)" style="width:100%;border:none;cursor:pointer" class="btn-pri">Send Message →</button>
-      </div>
+        <div class="fg"><label>Email</label><input type="email" name="email" placeholder="jane@example.com" required/></div>
+        <div class="fg"><label>Inquiry Type</label>
+          <select name="inquiry_type">
+            <option value="">Select one…</option>
+            <option>Brand Collaboration</option>
+            <option>Sponsored Content</option>
+            <option>Product Review</option>
+            <option>General Question</option>
+            <option>DIY Advice</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell me about your project or partnership idea…" required></textarea></div>
+        <button type="submit" style="width:100%;border:none;cursor:pointer" class="btn-pri">Send Message →</button>
+      </form>
     </div>
   </div>
 </section>
@@ -731,89 +740,93 @@ window.addEventListener('load', () => {
 })();
 
 /* ══════════════════════════════════════════════════════
-   YOUTUBE VIDEOS — fetch real video IDs from RSS at runtime
-   Channel ID: UCq4Ad1V-eQJPdW6MJ7IIv1g
-   We use a public CORS proxy to fetch the YouTube RSS feed,
-   parse the 4 most recent video IDs and titles, then embed them.
-   If the proxy fails we fall back to the uploads playlist embed.
+   YOUTUBE VIDEOS
+   YouTube's RSS feed is CORS-enabled — we fetch it directly
+   in the browser, parse the XML with DOMParser, extract real
+   video IDs and titles, then embed each as a UNIQUE iframe.
+   No API key, no proxy, no duplicates.
 ════════════════════════════════════════════════════════ */
 (async function loadYouTubeVideos() {
   const CHANNEL_ID = 'UCq4Ad1V-eQJPdW6MJ7IIv1g';
-  const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
-  // Use a public CORS proxy — rss2json converts RSS to clean JSON, no API key needed
-  const API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}&count=4`;
+  const RSS = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
 
-  // Category labels for her content types
-  const cats = ['Latest Build','Home Project','DIY Tutorial','Room Makeover'];
+  const wrap    = document.getElementById('ytFeatureWrap');
+  const loading = document.getElementById('ytLoadingMain');
+  const cardIds = ['ytCard1','ytCard2','ytCard3'];
+  const cats    = ['Latest Build', 'Home Project', 'DIY Tutorial'];
 
-  function makeEmbed(videoId, title, cat, size='small') {
-    const embedSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&color=white`;
-    if (size === 'large') {
-      return `<div class="yt-feature">
-        <iframe src="${embedSrc}" title="${title}"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen loading="lazy"></iframe>
-      </div>`;
-    }
-    return `<div class="vc-info" style="display:none" data-cat="${cat}" data-title="${title}"></div>
-      <iframe src="${embedSrc}" title="${title}"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen loading="lazy"
-        style="width:100%;aspect-ratio:16/9;border:none;display:block"></iframe>
-      <div class="vc-info"><div class="vc-cat">${cat}</div><div class="vc-title">${title}</div></div>`;
-  }
+  // Build an embed iframe string for a specific real video ID
+  const embedHtml = (videoId, title, cat, big = false) => {
+    const src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&color=white&iv_load_policy=3`;
+    const t = title.replace(/"/g, '&quot;');
+    const iframe = `<iframe src="${src}" title="${t}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen loading="lazy"
+      style="width:100%;${big ? 'height:100%' : 'aspect-ratio:16/9'};border:none;display:block"></iframe>`;
+    if (big) return `<div class="yt-feature">${iframe}</div>`;
+    return `${iframe}<div class="vc-info"><div class="vc-cat">${cat}</div><div class="vc-title">${t}</div></div>`;
+  };
 
-  function fallback() {
-    // Fallback: use the uploads playlist
+  // Graceful fallback using playlist index — each card starts at a different video
+  const useFallback = () => {
     const PL = 'UUq4Ad1V-eQJPdW6MJ7IIv1g';
-    const wrap = document.getElementById('ytFeatureWrap');
-    if (wrap) wrap.innerHTML = `<div class="yt-feature"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${PL}&rel=0&modestbranding=1&color=white" title="YessAtHome — Latest Videos" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
-    // For grid, show playlist at offsets 1, 2, 3
-    ['ytCard1','ytCard2','ytCard3'].forEach((id, i) => {
+    const src = i => `https://www.youtube-nocookie.com/embed/videoseries?list=${PL}&index=${i}&rel=0&modestbranding=1&color=white`;
+    if (wrap) {
+      loading?.remove();
+      wrap.innerHTML = `<div class="yt-feature"><iframe src="${src(0)}" title="YessAtHome Latest Video" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" allowfullscreen loading="lazy"></iframe></div>`;
+    }
+    cardIds.forEach((id, i) => {
       const el = document.getElementById(id);
-      if (el) el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${PL}&index=${i+1}&rel=0&modestbranding=1" title="YessAtHome Video ${i+2}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="width:100%;aspect-ratio:16/9;border:none;display:block"></iframe><div class="vc-info"><div class="vc-cat">${cats[i+1]}</div><div class="vc-title">Yesenia Lee — DIY Build</div></div>`;
+      if (el) el.innerHTML = `<iframe src="${src(i+1)}" title="YessAtHome Video ${i+2}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy" style="width:100%;aspect-ratio:16/9;border:none;display:block"></iframe><div class="vc-info"><div class="vc-cat">${cats[i]||'DIY Build'}</div><div class="vc-title">Yesenia Lee — YessAtHome</div></div>`;
     });
-  }
+  };
 
   try {
-    const res = await fetch(API, { signal: AbortSignal.timeout(6000) });
-    if (!res.ok) throw new Error('fetch failed');
-    const data = await res.json();
-    if (data.status !== 'ok' || !data.items?.length) throw new Error('no items');
+    // Fetch YouTube RSS directly — it's CORS-enabled for browsers
+    const res = await fetch(RSS, { signal: AbortSignal.timeout(7000) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const xml = await res.text();
 
-    const items = data.items.slice(0, 4);
+    // Parse XML
+    const doc  = new DOMParser().parseFromString(xml, 'text/xml');
+    const entries = Array.from(doc.querySelectorAll('entry'));
+    if (!entries.length) throw new Error('no entries');
 
-    // Helper: extract video ID from YouTube link
-    const getId = url => {
-      const m = url.match(/[?&v=]([A-Za-z0-9_-]{11})/);
-      return m ? m[1] : null;
-    };
+    // Extract video ID and title from each entry
+    // YouTube RSS: <yt:videoId>ABC123</yt:videoId> or from the link element
+    const videos = entries.slice(0, 4).map(entry => {
+      // Try yt:videoId element first (most reliable)
+      const ytId = entry.querySelector('videoId')?.textContent?.trim();
+      // Fallback: extract from <link rel="alternate" href="...watch?v=ID">
+      const linkHref = entry.querySelector('link[rel="alternate"]')?.getAttribute('href') || '';
+      const fromLink = linkHref.match(/[?&]v=([A-Za-z0-9_-]{11})/)?.[1];
+      // Fallback: from <id> element which is like yt:video:VIDEOID
+      const idEl = entry.querySelector('id')?.textContent || '';
+      const fromId = idEl.split(':').pop()?.trim();
 
-    // Big featured — first video
-    const v0 = items[0];
-    const id0 = getId(v0.link);
-    const wrap = document.getElementById('ytFeatureWrap');
-    const loading = document.getElementById('ytLoadingMain');
-    if (wrap && id0) {
+      const videoId = ytId || fromLink || fromId || null;
+      const title   = entry.querySelector('title')?.textContent?.trim() || 'YessAtHome';
+      return { videoId, title };
+    }).filter(v => v.videoId && v.videoId.length === 11);
+
+    if (videos.length < 2) throw new Error('not enough valid video IDs');
+
+    // Render big featured (video 0)
+    if (wrap && videos[0]) {
       loading?.remove();
-      wrap.innerHTML = makeEmbed(id0, v0.title, cats[0], 'large');
-    } else {
-      fallback(); return;
+      wrap.innerHTML = embedHtml(videos[0].videoId, videos[0].title, cats[0], true);
     }
 
-    // 3 grid cards — videos 1, 2, 3
-    ['ytCard1','ytCard2','ytCard3'].forEach((cardId, i) => {
-      const item = items[i + 1];
-      const card = document.getElementById(cardId);
-      if (!card || !item) return;
-      const vid = getId(item.link);
-      if (!vid) return;
-      card.innerHTML = makeEmbed(vid, item.title, cats[i+1], 'small');
+    // Render 3 grid cards (videos 1, 2, 3) — each DIFFERENT video ID
+    cardIds.forEach((id, i) => {
+      const el  = document.getElementById(id);
+      const vid = videos[i + 1];
+      if (el && vid) el.innerHTML = embedHtml(vid.videoId, vid.title, cats[i], false);
     });
 
-  } catch(e) {
-    console.warn('RSS fetch failed, using playlist fallback:', e.message);
-    fallback();
+  } catch (err) {
+    console.warn('[YessAtHome] YouTube RSS fetch failed:', err.message, '— using fallback');
+    useFallback();
   }
 })();
 
