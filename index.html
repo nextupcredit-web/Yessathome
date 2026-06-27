@@ -201,7 +201,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 52px;display:f
 
 /* ══ CONTACT ══ */
 #contact{background:var(--char)}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;align-items:start}
 .ci p{font-size:.93rem;line-height:1.85;color:var(--dim);margin-bottom:34px}
 .cd{display:flex;align-items:center;gap:13px;padding:13px 17px;margin-bottom:13px;border:1px solid rgba(212,175,55,.1);border-radius:3px;transition:border-color .25s}
 .cd:hover{border-color:rgba(212,175,55,.34)}
@@ -216,6 +216,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 52px;display:f
 .cf textarea{min-height:115px;resize:vertical}
 .cf select option{background:var(--char2)}
 .fr2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+/* Contact photo column — full image, no crop */
+.contact-photo{border-radius:6px;overflow:hidden;border:1px solid rgba(212,175,55,.22);box-shadow:0 0 28px rgba(212,175,55,.15),0 16px 48px rgba(0,0,0,.5)}
+.contact-photo img{width:100%;height:auto;display:block}
 
 /* ══ FOOTER ══ */
 footer{background:#07060a;border-top:1px solid rgba(212,175,55,.12);padding:52px 48px 26px}
@@ -669,18 +672,21 @@ footer{background:#07060a;border-top:1px solid rgba(212,175,55,.12);padding:52px
       <div class="gline"></div>
     </div>
     <div class="contact-grid">
+      <!-- Col 1: contact info -->
       <div class="ci reveal">
         <p>Whether you're a brand looking for a collaboration, a fellow DIYer with a question, or just a fan — Yesenia's inbox is open. Let's build something amazing.</p>
         <div class="cd"><div class="cd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="cd-l">Email</div><div class="cd-v">homewithyesslee@gmail.com</div></div></div>
         <div class="cd"><div class="cd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="cd-l">Location</div><div class="cd-v">Jacksonville, Florida</div></div></div>
         <div class="cd"><div class="cd-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div><div class="cd-l">Collabs</div><div class="cd-v">Open to brand partnerships &amp; sponsored content</div></div></div>
         <div style="margin-top:26px"><a href="https://cash.app/$Yesylee" target="_blank" class="btn-out" style="display:inline-flex;align-items:center;gap:8px">☕ Buy Me a Coffee</a></div>
-
-        <!-- Pantry reveal photo -->
-        <div style="margin-top:32px;border-radius:6px;overflow:hidden;border:1px solid rgba(212,175,55,.2);box-shadow:0 0 28px rgba(212,175,55,.15),0 16px 48px rgba(0,0,0,.5)">
-          <img src="yesenia-about.jpg" alt="Yesenia Lee — DIY Pantry Reveal" style="width:100%;display:block;object-fit:cover;max-height:340px;object-position:top center" onerror="this.parentElement.style.display='none'"/>
-        </div>
       </div>
+
+      <!-- Col 2: full pantry photo — no crop, natural height -->
+      <div class="contact-photo reveal">
+        <img src="yesenia-about.jpg" alt="Yesenia Lee — DIY Pantry Reveal" onerror="this.parentElement.style.display='none'"/>
+      </div>
+
+      <!-- Col 3: contact form -->
       <form class="cf reveal" action="https://formspree.io/f/xqevqwgd" method="POST">
         <div class="fr2">
           <div class="fg"><label>First Name</label><input type="text" name="first_name" placeholder="Jane" required/></div>
